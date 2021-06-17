@@ -3,7 +3,9 @@ import React from 'react';
 function Login(){
     return(
         <>
-            hola
+            <div>
+                <h1>Login Page</h1>  
+            </div>
         </>
     )
 }
