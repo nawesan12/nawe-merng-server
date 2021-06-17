@@ -4,3 +4,8 @@
     font-size: 2rem;
     margin: 1rem 0;
 }
+
+.form-container {
+    width: 50%;
+    margin:auto;
+}

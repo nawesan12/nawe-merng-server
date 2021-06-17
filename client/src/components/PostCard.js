@@ -1,19 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
 import { Card, Image, Button, Label, Icon } from 'semantic-ui-react';
 import moment from 'moment';
 
+import { AuthContext } from '../context/auth';
+import LikeButton from './LikeButton';
+
 function PostCard({ 
-    post: { body, createdAt, id, username, likes}
+    post: { body, createdAt, id, username, likeCount, likes, commentCount}
 }) {
 
-    function likePost(){
-        console.log('like post')
-    }
-
-    function commentOnPost(){
-        console.log('commented on post')
-    }
+    const { user } = useContext(AuthContext);
 
     return (
     <Card fluid>
@@ -24,28 +21,36 @@ function PostCard({
           src='https://react.semantic-ui.com/images/avatar/large/molly.png'
         />
         <Card.Header>{username}</Card.Header>
-        <Card.Meta as={Link} to={`/posts/${id}`}>{moment(createdAt).fromNow(true)}</Card.Meta>
+        <Card.Meta as={Link} to={`/${username}/posts/${id}`}>
+          {moment(createdAt).fromNow(true)}</Card.Meta>
         <Card.Description>
           {body}
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Button as='div' labelPosition='right' onClick={likePost}>
-        <Button color='teal' basic>
-            <Icon name='heart' />
+
+        <LikeButton user={user} post={{ id, likes, likeCount }}/>
+
+        <Button labelPosition='right' as={Link} to={`/${username}/posts/${id}`}>
+          <Button color='blue' basic>
+              <Icon name='comment'/>
+          </Button>
+          <Label basic color='blue' pointing='left'>
+              {commentCount}
+          </Label>
         </Button>
-        <Label basic color='teal' pointing='left'>
-            {likes}
-        </Label>
-        </Button>
-        <Button as='div' labelPosition='right' onClick={commentOnPost}>
-        <Button color='blue' basic>
-            <Icon name='comment'/>
-        </Button>
-        <Label basic color='blue' pointing='left'>
-            
-        </Label>
-        </Button>
+
+        { user && user.username === username && (
+          <Button 
+            as="div" 
+            color="red" 
+            floated="right" 
+            onClick={() => console.log('Delete Post')}
+          >
+            <Icon name="trash" style={{margin: 0}}/>
+          </Button>
+        )}
+
       </Card.Content>
     </Card>
     )
